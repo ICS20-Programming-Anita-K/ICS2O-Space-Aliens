@@ -7,6 +7,13 @@
 // Modified by: Anita Kay
 // This is the Phaser3 configuration file
 
+import SplashScene from './splashScene.js'
+import TitleScene from './titleScene.js'
+
+// Create variables that hold the scene files
+const splashScene = new SplashScene
+const titleScene = new TitleScene
+
 //* Setup for game scene */
 const config = {
   type: Phaser.AUTO,
@@ -19,7 +26,7 @@ const config = {
     }
   },
   // Set background color
-  backgroundColor: 0x5f6e7a,
+  backgroundColor: 0xffffff,
   scale: {
     mode: Phaser.Scale.FIT,
     // We place it in the middle of the page.
@@ -28,4 +35,11 @@ const config = {
 }
 
 const game = new Phaser.Game(config)
-console.log(game)
+
+// Load scenes
+// NOTE: remember any "key" is global and CAN NOT be reused!
+game.scene.add('splashScene', splashScene)
+game.scene.add('titleScene', titleScene)
+
+// Start title
+game.scene.start('splashScene')

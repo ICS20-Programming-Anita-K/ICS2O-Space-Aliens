@@ -9,10 +9,12 @@
 
 import SplashScene from './splashScene.js'
 import TitleScene from './titleScene.js'
+import MenuScene from './menuScene.js'
 
 // Create variables that hold the scene files
 const splashScene = new SplashScene
 const titleScene = new TitleScene
+const menuScene = new MenuScene
 
 //* Setup for game scene */
 const config = {
@@ -26,7 +28,7 @@ const config = {
     }
   },
   // Set background color
-  backgroundColor: 0xffffff,
+  backgroundColor: 0xB2AC88,
   scale: {
     mode: Phaser.Scale.FIT,
     // We place it in the middle of the page.
@@ -40,6 +42,7 @@ const game = new Phaser.Game(config)
 // NOTE: remember any "key" is global and CAN NOT be reused!
 game.scene.add('splashScene', splashScene)
 game.scene.add('titleScene', titleScene)
+game.scene.add('menuScene', menuScene)
 
 // Start title
 game.scene.start('splashScene')

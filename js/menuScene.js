@@ -18,7 +18,7 @@ class MenuScene extends Phaser.Scene {
 
   //Initialize to activate scene
   init (data) {
-    this.cameras.main.setBackgroundColor('#ffffff')
+    this.cameras.main.setBackgroundColor('#abcfa9')
   }
 
   //Print to the console what scene we are going to be on

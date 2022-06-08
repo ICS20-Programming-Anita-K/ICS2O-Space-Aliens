@@ -17,7 +17,7 @@ class GameScene extends Phaser.Scene {
 
   //Initialize to activate scene
   init (data) {
-    this.cameras.main.setBackgroundColor('#ffffff')
+    this.cameras.main.setBackgroundColor('#abcfa9')
   }
 
   //Print to the console what scene we are going to be on
@@ -35,10 +35,29 @@ class GameScene extends Phaser.Scene {
     this.background = this.add.image(0, 0, 'forestBackground').setScale(3.5)
     this.background.setOrigin(0,0)
 
-    this.fairy = this.physics.add.sprite(1920 / 2, 1080 - 100, 'fairy')
+    // Show the sprite
+    this.fairy = this.physics.add.sprite(1920 / 2, 1080 - 200, 'fairy').setScale(0.7)
   }
 
+  // Update so that the sprite can move. Called 60 times a second.
   update (time, delta) {
+
+    const keyLeftObj = this.input.keyboard.addKey('LEFT')
+    const keyRightObj = this.input.keyboard.addKey('RIGHT')
+
+    if (keyLeftObj.isDown == true) {
+      this.fairy.x -= 15
+      if (this.fairy.x < 0) {
+        this.fairy.x = 0
+      }
+    }
+
+    if(keyRightObj.isDown == true) {
+      this.fairy.x += 15
+      if (this.fairy.x > 1920) {
+        this.fairy.x = 1920
+      }
+    }
   }
 }
 

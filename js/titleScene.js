@@ -14,13 +14,13 @@ class TitleScene extends Phaser.Scene {
     // Create variables to hold images and text
     this.titleSceneBackgroundImage = null
     this.titleSceneText = null
-    this.titleSceneTextStyle = { font: '200px Times', fill: '#e1e0d3', align: 'center'}
+    this.titleSceneTextStyle = { font: '200px Times', fill: '#298c43', align: 'center'}
     
   }
 
   //Initialize to activate scene
   init (data) {
-    this.cameras.main.setBackgroundColor('#ffffff')
+    this.cameras.main.setBackgroundColor('#abcfa9')
   }
 
   //Print to the console what scene we are going to be on
@@ -37,7 +37,7 @@ class TitleScene extends Phaser.Scene {
     this.titleSceneBackgroundImage.y = 1080 / 2
     // Add text
     
-    this.titleSceneText = this.add.text(1920 /2, (1080 / 2) + 350, 'Forest Fairies', this.titleSceneTextStyle).setOrigin(0.5)  
+    this.titleSceneText = this.add.text(1920 /2, 150, 'Forest Fairies', this.titleSceneTextStyle).setOrigin(0.5)  
   }
 
     // Update so that after a certain time, the next scene plays

@@ -11,6 +11,7 @@ class TitleScene extends Phaser.Scene {
   constructor () {
     super({ key: 'titleScene' })
 
+    // Create variables to hold images and text
     this.titleSceneBackgroundImage = null
     this.titleSceneText = null
     this.titleSceneTextStyle = { font: '200px Times', fill: '#e1e0d3', align: 'center'}
@@ -19,12 +20,13 @@ class TitleScene extends Phaser.Scene {
 
   //Initialize to activate scene
   init (data) {
-    this.cameras.main.setBackgroundColor('#B2AC88')
+    this.cameras.main.setBackgroundColor('#ffffff')
   }
 
   //Print to the console what scene we are going to be on
   preload () {
     console.log('Title Scene')
+  // Load image
     this.load.image('titleSceneBackground', 'images/fairies_screen_image.jpg')
   }
 
@@ -37,7 +39,11 @@ class TitleScene extends Phaser.Scene {
     this.titleSceneText = this.add.text(1920 /2, (1080 / 2) + 350, 'Forest Fairies', this.titleSceneTextStyle).setOrigin(0.5)  
   }
 
+    // Update so that after a certain time, the next scene plays
   update (time, delta) {
+    if (time > 10000) {
+      this.scene.switch('menuScene')
+    }
   }
 }
 

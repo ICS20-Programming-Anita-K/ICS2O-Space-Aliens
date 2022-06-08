@@ -32,7 +32,7 @@ class SplashScene extends Phaser.Scene {
   
   // Update so that after a certain time, the next scene plays
   update (time, delta) {
-    if (time > 4000) {
+    if (time > 5000) {
       this.scene.switch('titleScene')
     }
   }

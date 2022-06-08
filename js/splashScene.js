@@ -23,7 +23,7 @@ class SplashScene extends Phaser.Scene {
     this.load.image('splashSceneBackground', './images/splashSceneImage.jpg')
   }
 
-  // Load and center the image
+  // Show and center the image
   create (data) {
     this.splashSceneBackgroundImage = this.add.sprite(0, 0, 'splashSceneBackground')
    this.splashSceneBackgroundImage.x = 1920 / 2
@@ -32,7 +32,7 @@ class SplashScene extends Phaser.Scene {
   
   // Update so that after a certain time, the next scene plays
   update (time, delta) {
-    if (time > 5000) {
+    if (time > 4000) {
       this.scene.switch('titleScene')
     }
   }

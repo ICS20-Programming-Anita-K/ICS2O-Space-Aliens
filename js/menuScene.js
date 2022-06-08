@@ -29,12 +29,12 @@ class MenuScene extends Phaser.Scene {
     this.load.image('startButton', 'images/start.png')
   }
 
-  //Load and center the image
+  //Show and center the image
   create (data) {
     this.menuSceneBackgroundImage = this.add.sprite(0, 0, 'menuSceneBackground')
     this.menuSceneBackgroundImage.x = 1920 / 2
     this.menuSceneBackgroundImage.y = 1080 / 2
-    //Load the button and make it interactive
+    //Show the button and make it interactive
     
     this.startButton = this.add.sprite(1920 / 2, (1080 / 2) + 100, 'startButton')
     this.startButton.setInteractive({useHandCursor: true })

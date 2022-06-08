@@ -30,18 +30,19 @@ class TitleScene extends Phaser.Scene {
     this.load.image('titleSceneBackground', 'images/fairies_screen_image.jpg')
   }
 
-  // Load, center, and make the image bigger. Also, add text.
+  // Show, center, and make the images bigger.
   create (data) {
     this.titleSceneBackgroundImage = this.add.sprite(0, 0, 'titleSceneBackground').setScale(2.75)
     this.titleSceneBackgroundImage.x = 1920 / 2
     this.titleSceneBackgroundImage.y = 1080 / 2
-
+    // Add text
+    
     this.titleSceneText = this.add.text(1920 /2, (1080 / 2) + 350, 'Forest Fairies', this.titleSceneTextStyle).setOrigin(0.5)  
   }
 
     // Update so that after a certain time, the next scene plays
   update (time, delta) {
-    if (time > 10000) {
+    if (time > 8000) {
       this.scene.switch('menuScene')
     }
   }

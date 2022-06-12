@@ -8,12 +8,26 @@
 // This is the Menu Scene
 
 class GameScene extends Phaser.Scene {
+
+  //Create a goblin
+  createGoblin () {
+    //Random number generators for location and velocity.
+    const goblinXLocation = Math.floor(Math.random() * 1920) + 1
+    let goblinXVelocity = Math.floor(Math.random() * 50) + 1
+    goblinXVelocity *= Math.round(Math.random()) ? 1 : -1
+    const aGoblin = this.physics.add.sprite(goblinXLocation, -100, 'goblin')
+    aGoblin.body.velocity.y = 200
+    aGoblin.body.velocity.x = goblinXVelocity
+    this.goblinGroup.add(aGoblin)
+  }
   constructor () {
     super({ key: 'gameScene' })
 
-    this.background = null
     this.fairy = null
     this.fireSparkles = false
+    this.score = 0
+    this.scoreText = null
+    this.scoreTextStyle = { font: '65px Times', fill: '#ff0303', align: 'center'}
   }
 
   //Initialize to activate scene
@@ -29,20 +43,40 @@ class GameScene extends Phaser.Scene {
     this.load.image('forestBackground', 'images/forestBackground.jpg')
     this.load.image('fairy', 'images/fairy.png')
     this.load.image('sparkles', 'images/sparkles.png')
+    this.load.image('goblin', 'images/goblin.png')
     //Load sound files
     this.load.audio('twinkle', 'sounds/twinkle.wav')
+    this.load.audio('groan', 'sounds/groan.wav')
   }
 
-  // Show the images to the user and center them
+  // Show the images to the user and adjust them
   create (data) {
     this.background = this.add.image(0, 0, 'forestBackground').setScale(3.5)
     this.background.setOrigin(0,0)
+
+    //Show the score
+    this.scoreText = this.add.text(10, 10, 'Score: ' + this.score.toString(), this.scoreTextStyle)
 
     // Show the sprite
     this.fairy = this.physics.add.sprite(1920 / 2, 1080 - 200, 'fairy').setScale(0.7)
 
     // Create a group for the sparkles
     this.sparklesGroup = this.physics.add.group() 
+
+    //Create a group for the goblins.
+    this.goblinGroup = this.add.group()
+    this.createGoblin()
+
+    //Add a collision between the sparkles and goblins.
+    this.physics.add.collider(this.sparklesGroup, this.goblinGroup, function (sparklesCollide, goblinCollide) {
+      goblinCollide.destroy()
+      sparklesCollide.destroy()
+      this.sound.play('groan')
+      this.score = this.score + 1
+      this.scoreText.setText('Score: ' + this.score.toString())
+      this.createGoblin()
+    }.bind(this))
+    
   }
 
   // Update so that the sprite can move. Called 60 times a second.

@@ -14,6 +14,7 @@ class MenuScene extends Phaser.Scene {
     // Create variables to hold images
     this.menuSceneBackgroundImage = null
     this.startButton = null
+    this.instructionsButton = null
   }
 
   //Initialize to activate scene
@@ -27,6 +28,10 @@ class MenuScene extends Phaser.Scene {
     //Load images
     this.load.image('menuSceneBackground', 'images/fairies_screen_image2.jpg')
     this.load.image('startButton', 'images/start.png')
+    this.load.image('instructionsButton', 'images/instructions.png')
+
+    //Load sounds
+    this.load.audio('click', 'sounds/click.wav')
   }
 
   //Show and center the image
@@ -36,9 +41,13 @@ class MenuScene extends Phaser.Scene {
     this.menuSceneBackgroundImage.y = 1080 / 2
     //Show the button and make it interactive
     
-    this.startButton = this.add.sprite(1920 / 2, (1080 / 2) + 100, 'startButton')
+    this.startButton = this.add.sprite(1920 / 3, (1080 / 3) + 100, 'startButton')
     this.startButton.setInteractive({useHandCursor: true })
     this.startButton.on('pointerdown', () => this.clickButton())
+
+    this.instructionsButton = this.add.sprite(1920 / 2 , (1080 / 2) + 100, 'instructionsButton')
+    this.instructionsButton.setInteractive({useHandCursor: true })
+    this.instructionsButton.on('pointerdown', () => this.clickButton1())
     
   }
 
@@ -47,6 +56,12 @@ class MenuScene extends Phaser.Scene {
 
   clickButton () {
     this.scene.start('gameScene')
+    this.sound.play('click')
+  }
+
+  clickButton1 () {
+    this.scene.start('instructionsScene')
+    this.sound.play('click')
   }
 }
 

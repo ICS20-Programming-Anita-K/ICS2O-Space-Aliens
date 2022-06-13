@@ -28,6 +28,7 @@ class GameScene extends Phaser.Scene {
     this.score = 0
     this.scoreText = null
     this.scoreTextStyle = { font: '65px Times', fill: '#ff0303', align: 'center'}
+    this.gameOverTextStyle = { font: '65px Arial', fill: '#ff0000', align: 'center'}
   }
 
   //Initialize to activate scene
@@ -47,6 +48,7 @@ class GameScene extends Phaser.Scene {
     //Load sound files
     this.load.audio('twinkle', 'sounds/twinkle.wav')
     this.load.audio('groan', 'sounds/groan.wav')
+    this.load.audio('lose', 'sounds/lose.wav')
   }
 
   // Show the images to the user and adjust them
@@ -67,7 +69,7 @@ class GameScene extends Phaser.Scene {
     this.goblinGroup = this.add.group()
     this.createGoblin()
 
-    //Add a collision between the sparkles and goblins.
+    //Code that runs if there is a collision between the sparkles and goblins.
     this.physics.add.collider(this.sparklesGroup, this.goblinGroup, function (sparklesCollide, goblinCollide) {
       goblinCollide.destroy()
       sparklesCollide.destroy()
@@ -76,7 +78,17 @@ class GameScene extends Phaser.Scene {
       this.scoreText.setText('Score: ' + this.score.toString())
       this.createGoblin()
     }.bind(this))
-    
+
+    //Code that runs if there is a collision between the fairies and goblins.
+    this.physics.add.collider(this.fairy, this.goblinGroup, function (fairyCollide, goblinCollide) {
+      this.sound.play('lose')
+      this.physics.pause()
+      goblinCollide.destroy()
+      fairyCollide.destroy()
+      this.gameOverText = this.add.text(1920 / 2, 1080 / 2, 'Game Over!\nClick to play again.', this.gameOverTextStyle).setOrigin(0.5)
+      this.gameOverText.setInteractive({ userHandCursor: true })
+      this.gameOverText.on('pointerdown', () => this.scene.start('gameScene'))
+    }.bind(this))
   }
 
   // Update so that the sprite can move. Called 60 times a second.

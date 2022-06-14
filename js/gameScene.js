@@ -20,6 +20,17 @@ class GameScene extends Phaser.Scene {
     aGoblin.body.velocity.x = goblinXVelocity
     this.goblinGroup.add(aGoblin)
   }
+    //Create a mushroom
+  createMushroom () {
+    //Random number generators for location and velocity.
+    const mushroomXLocation = Math.floor(Math.random() * 1920) + 1
+    let mushroomXVelocity = Math.floor(Math.random() * 50) + 1
+    mushroomXVelocity *= Math.round(Math.random()) ? 1 : -1
+    const aMushroom = this.physics.add.sprite(mushroomXLocation, -100, 'mushroom')
+    aMushroom.body.velocity.y = 200
+    aMushroom.body.velocity.x = mushroomXVelocity
+    this.mushroomGroup.add(aMushroom)
+  }
   constructor () {
     super({ key: 'gameScene' })
 
@@ -28,7 +39,7 @@ class GameScene extends Phaser.Scene {
     this.score = 0
     this.scoreText = null
     this.scoreTextStyle = { font: '65px Times', fill: '#ff0303', align: 'center'}
-    this.gameOverTextStyle = { font: '65px Arial', fill: '#ff0000', align: 'center'}
+    this.gameOverTextStyle = { font: '65px Times', fill: '#ff0000', align: 'center'}
   }
 
   //Initialize to activate scene
@@ -45,6 +56,7 @@ class GameScene extends Phaser.Scene {
     this.load.image('fairy', 'images/fairy.png')
     this.load.image('sparkles', 'images/sparkles.png')
     this.load.image('goblin', 'images/goblin.png')
+    this.load.image('mushroom', 'images/mushroom.png')
     //Load sound files
     this.load.audio('twinkle', 'sounds/twinkle.wav')
     this.load.audio('groan', 'sounds/groan.wav')
@@ -136,6 +148,13 @@ class GameScene extends Phaser.Scene {
       // Destroy sparkles once they have left the screen.
       if (item.y < 0) {
         item.destroy()
+      }
+    })
+     //make goblins respawn when they are not shot down.
+    this.goblinGroup.children.each(function (item) {
+      if (item.y > 1080) {
+        item.y = -10
+        item.x = Math.floor(Math.random() * 1920 + 1)
       }
     })
   }

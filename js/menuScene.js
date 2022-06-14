@@ -41,13 +41,13 @@ class MenuScene extends Phaser.Scene {
     this.menuSceneBackgroundImage.y = 1080 / 2
     //Show the button and make it interactive
     
-    this.startButton = this.add.sprite(1920 / 3, (1080 / 3) + 100, 'startButton')
+    this.startButton = this.add.sprite(1920 / 2, (1080 / 4.5) + 100, 'startButton')
     this.startButton.setInteractive({useHandCursor: true })
     this.startButton.on('pointerdown', () => this.clickButton())
 
-    this.instructionsButton = this.add.sprite(1920 / 2 , (1080 / 2) + 100, 'instructionsButton')
+    this.instructionsButton = this.add.sprite(1920 / 2 , (1080 / 1.5) + 100, 'instructionsButton')
     this.instructionsButton.setInteractive({useHandCursor: true })
-    this.instructionsButton.on('pointerdown', () => this.clickButton1())
+    this.instructionsButton.on('pointerdown', () => this.clickButtonOne())
     
   }
 
@@ -59,8 +59,8 @@ class MenuScene extends Phaser.Scene {
     this.sound.play('click')
   }
 
-  clickButton1 () {
-    this.scene.start('instructionsScene')
+  clickButtonOne () {
+    this.scene.start('instructionScene')
     this.sound.play('click')
   }
 }

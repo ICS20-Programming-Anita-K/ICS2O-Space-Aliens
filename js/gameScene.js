@@ -39,7 +39,9 @@ class GameScene extends Phaser.Scene {
     this.score = 0
     this.scoreText = null
     this.scoreTextStyle = { font: '65px Times', fill: '#ff0303', align: 'center'}
-    this.gameOverTextStyle = { font: '65px Times', fill: '#ff0000', align: 'center'}
+    this.lives = 3
+    this.livesText = null
+    this.livesTextStyle = { font: '65px Times', fill: '#ff0303', align: 'right'}
   }
 
   //Initialize to activate scene
@@ -60,7 +62,8 @@ class GameScene extends Phaser.Scene {
     //Load sound files
     this.load.audio('twinkle', 'sounds/twinkle.wav')
     this.load.audio('groan', 'sounds/groan.wav')
-    this.load.audio('lose', 'sounds/lose.wav')
+    this.load.audio('die', 'sounds/die.wav')
+    this.load.audio('points', 'sounds/points.wav')
   }
 
   // Show the images to the user and adjust them
@@ -70,6 +73,9 @@ class GameScene extends Phaser.Scene {
 
     //Show the score
     this.scoreText = this.add.text(10, 10, 'Score: ' + this.score.toString(), this.scoreTextStyle)
+
+    //Show the lives
+    this.livesText = this.add.text(350, 10, 'Lives: ' + this.lives.toString(), this.livesTextStyle)
 
     // Show the sprite
     this.fairy = this.physics.add.sprite(1920 / 2, 1080 - 200, 'fairy').setScale(0.7)
@@ -81,26 +87,59 @@ class GameScene extends Phaser.Scene {
     this.goblinGroup = this.add.group()
     this.createGoblin()
 
+    //Create a group for the mushrooms.
+    this.mushroomGroup = this.add.group()
+    this.createMushroom()
+    
     //Code that runs if there is a collision between the sparkles and goblins.
     this.physics.add.collider(this.sparklesGroup, this.goblinGroup, function (sparklesCollide, goblinCollide) {
       goblinCollide.destroy()
       sparklesCollide.destroy()
       this.sound.play('groan')
+      this.score = this.score + 10
+      this.scoreText.setText('Score: ' + this.score.toString())
+      if (this.score >= 100) {
+        this.scene.switch('winScene')
+        this.score = 0
+        this.lives = 3
+      }
+      this.createGoblin()
+      this.createGoblin()
+    }.bind(this))
+
+     //Code that runs if there is a collision between the fairies and mushrooms.
+    this.physics.add.collider(this.fairy, this.mushroomGroup, function (fairyCollide, mushroomCollide) {
+      mushroomCollide.destroy()
+      this.sound.play('points')
       this.score = this.score + 1
       this.scoreText.setText('Score: ' + this.score.toString())
-      this.createGoblin()
+      this.fairy.body.velocity.y = 0
+      if (this.score >= 100) {
+        this.scene.switch('winScene')
+        this.score = 0
+        this.lives = 3
+      }
+      this.createMushroom()
     }.bind(this))
 
     //Code that runs if there is a collision between the fairies and goblins.
     this.physics.add.collider(this.fairy, this.goblinGroup, function (fairyCollide, goblinCollide) {
-      this.sound.play('lose')
-      this.physics.pause()
+      this.sound.play('die')
+      this.lives -= 1
+      this.livesText.setText('Lives: ' + this.lives.toString())
       goblinCollide.destroy()
-      fairyCollide.destroy()
-      this.gameOverText = this.add.text(1920 / 2, 1080 / 2, 'Game Over!\nClick to play again.', this.gameOverTextStyle).setOrigin(0.5)
-      this.gameOverText.setInteractive({ userHandCursor: true })
-      this.score = 0
-      this.gameOverText.on('pointerdown', () => this.scene.start('gameScene'))
+      this.fairy.body.velocity.y = 0
+      this.createGoblin()
+
+      //Create an if statement for when you run out of lives
+      if (this.lives <= 0) {
+        this.physics.pause()
+        fairyCollide.destroy()
+        goblinCollide.destroy()
+        this.scene.switch('loseScene')
+        this.score = 0
+        this.lives = 3
+      }
     }.bind(this))
   }
 
@@ -117,6 +156,7 @@ class GameScene extends Phaser.Scene {
       if (this.fairy.x < 0) {
         this.fairy.x = 1920
       }
+      this.fairy.flipX = false
     }
 
     //Use an if statement so that the sprite can move right.
@@ -125,6 +165,7 @@ class GameScene extends Phaser.Scene {
       if (this.fairy.x > 1920) {
         this.fairy.x = 0
       }
+      this.fairy.flipX = true
     }
 
     //Use an if statement so that the sprite shoots sparkles.
@@ -150,8 +191,15 @@ class GameScene extends Phaser.Scene {
         item.destroy()
       }
     })
-     //make goblins respawn when they are not shot down.
+     //Let goblins respawn when they are not shot down.
     this.goblinGroup.children.each(function (item) {
+      if (item.y > 1080) {
+        item.y = -10
+        item.x = Math.floor(Math.random() * 1920 + 1)
+      }
+    })
+    //Let mushrooms respawn when they are not collected.
+    this.mushroomGroup.children.each(function (item) {
       if (item.y > 1080) {
         item.y = -10
         item.x = Math.floor(Math.random() * 1920 + 1)

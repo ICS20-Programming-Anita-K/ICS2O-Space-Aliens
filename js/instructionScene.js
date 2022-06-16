@@ -14,7 +14,7 @@ class InstructionScene extends Phaser.Scene {
     // Create variables to hold images and text
     this.instructionSceneBackgroundImage = null
     this.instructionSceneText = null
-    this.instructionSceneTextStyle = { font: '50px Georgia', fill: '#298c43', align: 'center'}
+    this.instructionSceneTextStyle = { font: '50px Georgia', fill: '#ffffff', align: 'center'}
     this.backButton = null
   }
 
@@ -42,7 +42,7 @@ class InstructionScene extends Phaser.Scene {
     this.instructionSceneBackgroundImage.y = 1080 / 2
     
     // Add text
-    this.instructionSceneText = this.add.text(1920 /2, 50, 'Hello and welcome to Forest Fairies. To play the game, you (the forest fairy), must dodge and shoot spells at evil goblins in order to keep playing. Every time you collide with a goblin, you will lose one of five lives. Everytime you shoot a goblin, you will gain one point. For a bonus of 10 points, collect mushrooms. Once you reach 100 point while you still have more than zero lives, you win!', this.instructionSceneTextStyle).setOrigin(0.5).setScale(0.2) 
+    this.instructionSceneText = this.add.text(1920 /2, 250, 'Hello and welcome to Forest Fairies. \nTo play the game, you (the forest fairy), must \ndodge and shoot spells at evil goblins in order to keep playing. \nEvery time you collide with a goblin, \nyou will lose one of five lives. Everytime \nyou shoot a goblin, you will gain one point. For a bonus of 10 points, \ncollect mushrooms. Once you reach 100 point while you still \nhave more than zero lives, you win!', this.instructionSceneTextStyle).setOrigin(0.5).setScale(0.8)
 
     //Add a button to get back to menuScene.js
     this.backButton = this.add.sprite(1920 / 2 , (1080 / 1.5) + 100, 'backButton')

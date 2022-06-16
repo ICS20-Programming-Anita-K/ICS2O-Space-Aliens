@@ -36,7 +36,6 @@ class TitleScene extends Phaser.Scene {
     this.titleSceneBackgroundImage.x = 1920 / 2
     this.titleSceneBackgroundImage.y = 1080 / 2
     // Add text
-    
     this.titleSceneText = this.add.text(1920 /2, 150, 'Forest Fairies', this.titleSceneTextStyle).setOrigin(0.5)  
   }
 

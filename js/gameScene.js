@@ -34,6 +34,7 @@ class GameScene extends Phaser.Scene {
   constructor () {
     super({ key: 'gameScene' })
 
+    //Create variables to hold images and text
     this.fairy = null
     this.fireSparkles = false
     this.score = 0
@@ -41,7 +42,14 @@ class GameScene extends Phaser.Scene {
     this.scoreTextStyle = { font: '65px Times', fill: '#ff0303', align: 'center'}
     this.lives = 3
     this.livesText = null
-    this.livesTextStyle = { font: '65px Times', fill: '#ff0303', align: 'right'}
+    this.livesTextStyle = { font: '65px Times', fill: '#ff0303', align: 'center'}
+    this.gameOverText = null
+    this.gameOverTextStyle = { font: '100px Times', fill: '#ff0303', align: 'center'}
+
+    // game win text variable
+    this.gameWinText = null
+    // game over text variable styling
+    this.gameWinTextStyle = { font: '100px Times', fill: '#ff0303', align: 'center' }
   }
 
   //Initialize to activate scene
@@ -64,10 +72,13 @@ class GameScene extends Phaser.Scene {
     this.load.audio('groan', 'sounds/groan.wav')
     this.load.audio('die', 'sounds/die.wav')
     this.load.audio('points', 'sounds/points.wav')
+    this.load.audio('win', 'sounds/win.wav')
+    this.load.audio('lose', 'sounds/lose.wav')
   }
 
-  // Show the images to the user and adjust them
+
   create (data) {
+    // Show the images to the user and adjust them
     this.background = this.add.image(0, 0, 'forestBackground').setScale(3.5)
     this.background.setOrigin(0,0)
 
@@ -96,15 +107,24 @@ class GameScene extends Phaser.Scene {
       goblinCollide.destroy()
       sparklesCollide.destroy()
       this.sound.play('groan')
-      this.score = this.score + 10
+      this.score = this.score + 5
       this.scoreText.setText('Score: ' + this.score.toString())
-      if (this.score >= 100) {
-        this.scene.switch('winScene')
-        this.score = 0
-        this.lives = 3
-      }
       this.createGoblin()
       this.createGoblin()
+      //if statement for the amount of points you need to win
+    if (this.score >= 100) {
+      // pause physics to stop new enemies from spawning
+      this.physics.pause()
+      // play win sound
+      this.sound.play('win')
+      //destroy alien 
+      goblinCollide.destroy()
+      // display and style win text
+      this.gameWinText = this.add.text(1920 / 2, 1080 / 2, 'You win!\nClick to play again.', this.gameWinTextStyle).setOrigin(0.5)
+      // make game win text clickable to take you back to gameScene
+      this.gameWinText.setInteractive({ useHandCursor: true })
+      this.gameWinText.on('pointerdown', () => this.scene.start('gameScene', this.score = 0, this.lives = 3))
+    }
     }.bind(this))
 
      //Code that runs if there is a collision between the fairies and mushrooms.
@@ -114,12 +134,21 @@ class GameScene extends Phaser.Scene {
       this.score = this.score + 1
       this.scoreText.setText('Score: ' + this.score.toString())
       this.fairy.body.velocity.y = 0
-      if (this.score >= 100) {
-        this.scene.switch('winScene')
-        this.score = 0
-        this.lives = 3
-      }
       this.createMushroom()
+      //if statement for the amount of points you need to win
+    if (this.score >= 100) {
+      // pause physics to stop new enemies from spawning
+      this.physics.pause()
+      // play win sound
+      this.sound.play('win')
+      //destroy alien 
+      goblinCollide.destroy()
+      // display and style win text
+      this.gameWinText = this.add.text(1920 / 2, 1080 / 2, 'You won!\nClick to play again.', this.gameWinTextStyle).setOrigin(0.5)
+      // make game win text clickable to take you back to gameScene
+      this.gameWinText.setInteractive({ useHandCursor: true })
+      this.gameWinText.on('pointerdown', () => this.scene.start('gameScene', this.score = 0, this.lives = 3))
+    }
     }.bind(this))
 
     //Code that runs if there is a collision between the fairies and goblins.
@@ -133,10 +162,12 @@ class GameScene extends Phaser.Scene {
 
       //Create an if statement for when you run out of lives
       if (this.lives <= 0) {
-        this.physics.pause()
         fairyCollide.destroy()
         goblinCollide.destroy()
-        this.scene.switch('loseScene')
+        this.sound.play('lose')
+        this.gameOverText = this.add.text(1920 / 2, 1080 / 2, 'Game Over!\nClick to play again :)', this.gameOverTextStyle).setOrigin(0.5)
+        this.gameOverText.setInteractive({ useHandCursor: true })
+        this.gameOverText.on('pointerdown', () => this.scene.start('gameScene'))
         this.score = 0
         this.lives = 3
       }
@@ -179,7 +210,7 @@ class GameScene extends Phaser.Scene {
         this.sound.play('twinkle')
       }
     }
-
+    //Use an if statement so space bar must be pressed continuously to fire.
     if (keySpaceObj.isUp === true) {
       this.fireSparkles = false
     }

@@ -15,6 +15,9 @@ class MenuScene extends Phaser.Scene {
     this.menuSceneBackgroundImage = null
     this.startButton = null
     this.instructionsButton = null
+
+    //Create a variable to hold the background music
+    this.audioPlaying = false
   }
 
   //Initialize to activate scene
@@ -36,11 +39,20 @@ class MenuScene extends Phaser.Scene {
 
   //Show and center the image
   create (data) {
+    //Add a soundtrack
+    if (this.audioPlaying === false) {
+    var audio = new Audio('sounds/background.mp3')
+    audio.play()
+    audio.loop = true
+    // End the loop
+    this.audioPlaying = true
+    }
+    
     this.menuSceneBackgroundImage = this.add.sprite(0, 0, 'menuSceneBackground')
     this.menuSceneBackgroundImage.x = 1920 / 2
     this.menuSceneBackgroundImage.y = 1080 / 2
-    //Show the button and make it interactive
     
+    //Show the buttons and make them interactive
     this.startButton = this.add.sprite(1920 / 2, (1080 / 4.5) + 100, 'startButton')
     this.startButton.setInteractive({useHandCursor: true })
     this.startButton.on('pointerdown', () => this.clickButton())
@@ -53,7 +65,7 @@ class MenuScene extends Phaser.Scene {
 
   update (time, delta) {
   }
-
+  // Create functions for when the buttons are clicked
   clickButton () {
     this.scene.start('gameScene')
     this.sound.play('click')
